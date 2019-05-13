@@ -8,77 +8,36 @@ import './App.css';
 // @TODO: Edge support
 
 function generateKey() {
-  return Math.random().toString().replace('0.', '');
+  return `${Math.random().toString().replace('0.', '')}-${Date.now()}`;
 }
 
 export function Draggable(props) {
   const {
     key = generateKey(),
     className = '',
-    style = {}, 
+    style = {},
     disabled = false,
     onDragStart = () => {},
     onDragEnd = () => {},
     onDragEnter = () => {},
-    onDragExit = () => {},
     onDragLeave = () => {},
     onDragOver = () => {},
-    onDrop = () => {},
-    ref = undefined,
+    setRef = node => node,
     children = '',
   } = props;
 
-  const withRef = ref ? { ref } : {}; 
-
   return (
     <div
-      id={`draggable-container-${key}`}
+      key={`draggable-container-${key}`}
       className={className}
       style={style}
       draggable={!disabled}
-      onDragStart={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragStart(e);
-        return;
-      }}
-      onDragEnd={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragEnd(e);
-        return;
-      }}
-      onDragEnter={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragEnter(e);
-        return;
-      }}
-      onDragExit={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragExit(e);
-        return;
-      }}
-      onDragLeave={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragLeave(e);
-        return;
-      }}
-      onDragOver={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDragOver(e);
-        return;
-      }}
-      onDrop={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        onDrop(e);
-        return;
-      }}
-      {...withRef}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragOver={onDragOver}
+      ref={setRef}
     >
       {children}
     </div>
@@ -89,69 +48,30 @@ export function DropZone(props) {
   const {
     key = generateKey(),
     className = '',
-    style = {}, 
-    onDragStart = () => {},
-    onDragEnd = () => {},
+    style = {},
     onDragEnter = () => {},
-    onDragExit = () => {},
     onDragLeave = () => {},
     onDragOver = () => {},
     onDrop = () => {},
-    ref = undefined,
+    setRef = node => node,
     children = '',
   } = props;
 
-  const withRef = ref ? { ref } : {}; 
-
   return (
     <div
-      key={key}
-      style={style}
-      id={`dropzone-container-${key}`}
+      key={`dropzone-container-${key}`}
       className={className}
-      onDragStart={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        // onDragStart(e);
-        // return;
-      }}
-      onDragEnd={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        // onDragEnd(e);
-        // return;
-      }}
-      onDragEnter={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        // onDragEnter(e);
-        // return;
-      }}
-      onDragExit={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        // onDragExit(e);
-        // return;
-      }}
-      onDragLeave={(e) => {
-        // e.preventDefault();
-        // e.stopPropagation();
-        // onDragLeave(e);
-        // return;
-      }}
+      style={style}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
       onDragOver={(e) => {
         e.preventDefault();
         e.stopPropagation();
         onDragOver(e);
         return;
       }}
-      onDrop={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onDrop(e);
-        return;
-      }}
-      {...withRef}
+      ref={setRef}
     >
       {children}
     </div>
@@ -161,24 +81,46 @@ export function DropZone(props) {
 function App() {
   const handleDragStart = (e) => {
     console.log('HANDLE_DRAG_START - DRAGGABLE');
+    // e.dataTransfer.setData('id', 'I shot the sherrif!');
   };
 
   const handleDrop = (e) => {
     console.log('HANDLE_DROP - DROPZONE');
+    // console.log('e.dataTransfer', e.dataTransfer);
+    // console.log('data', e.dataTransfer.getData('id'))
   };
 
   const handleDragOver = (e) => {
     console.log('HANDLE_DRAG_OVER - DROPZONE');
+    // console.log('e.dataTransfer', e.dataTransfer);
   };
 
   return (
     <div>
-      <Draggable onDragStart={handleDragStart}>
+      <Draggable
+        // onDragEnd={(e) => {
+        //   console.log('onDragEnd');
+        // }}
+        // onDragEnter={() => console.log('onDragEnter')}
+        // onDragLeave={() => console.log('onDragLeave')}
+        // onDragStart={handleDragStart}
+        // onDragOver={(e) => {
+        //   e.preventDefault();
+        //   e.stopPropagation();
+        //   handleDragOver(e);
+        // }}
+        >
         Hi, Im draggable!
       </Draggable>
       <DropZone
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
+        // onDrop={handleDrop}
+        // onDragEnter={() => console.log('onDragEnter')}
+        // onDragLeave={() => console.log('onDragLeave')}
+        // onDragOver={(e) => {
+        //   // e.preventDefault();
+        //   // e.stopPropagation();
+        //   handleDragOver(e);
+        // }}
       >
         Drop something here friend!
       </DropZone>
